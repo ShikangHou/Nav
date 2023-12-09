@@ -1,0 +1,52 @@
+<launch>
+  <!-- Arguments -->
+  <arg name="cmd_vel_topic" default="/cmd_vel" />
+  <arg name="odom_topic" default="odom" />
+  <arg name="use_dwa_loacl_planner" default="true" />
+
+  <!-- move_base -->
+  <group if="$(arg use_dwa_loacl_planner)">
+    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+      <!-- global planner
+      <param name="base_global_planner" value="global_planner/GlobalPlanner" /> -->
+      <!-- local planner -->
+      <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
+      <rosparam file="$(find car_navigation)/param/dwa_local_planner_params.yaml" command="load" />
+      <!-- 最小速度设置为0,使其不能倒车 -->
+      <param name="DWAPlannerROS/min_vel_x" value="0.0" />
+      <!-- arguments -->
+      <rosparam file="$(find car_navigation)/param/costmap_common_params.yaml" command="load" ns="global_costmap" />
+      <rosparam file="$(find car_navigation)/param/costmap_common_params.yaml" command="load" ns="local_costmap" />
+      <rosparam file="$(find car_navigation)/param/local_costmap_params.yaml" command="load" />
+      <rosparam file="$(find car_navigation)/param/global_costmap_params.yaml" command="load" />
+      <rosparam file="$(find car_navigation)/param/move_base_params.yaml" command="load" />
+
+
+      <remap from="cmd_vel" to="$(arg cmd_vel_topic)"/>
+      <remap from="odom" to="$(arg odom_topic)"/>
+    </node>
+  </group>
+
+  <group unless="$(arg use_dwa_loacl_planner)">
+    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+      <!-- global planner -->
+      <!-- <param name="base_global_planner" value="global_planner/GlobalPlanner" /> -->
+      <!-- local planner -->
+      <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />
+      <rosparam file="$(find car_navigation)/param/teb_local_planner_params.yaml" command="load" />
+      <!-- arguments -->
+      <rosparam file="$(find car_navigation)/param/costmap_common_params.yaml" command="load" ns="global_costmap" />
+      <rosparam file="$(find car_navigation)/param/costmap_common_params.yaml" command="load" ns="local_costmap" />
+      <rosparam file="$(find car_navigation)/param/local_costmap_params.yaml" command="load" />
+      <rosparam file="$(find car_navigation)/param/global_costmap_params.yaml" command="load" />
+      <rosparam file="$(find car_navigation)/param/move_base_params.yaml" command="load" />
+      <rosparam file="$(find car_navigation)/param/costmap_converter_params.yaml" command="load" />
+
+      <remap from="cmd_vel" to="$(arg cmd_vel_topic)"/>
+      <remap from="odom" to="$(arg odom_topic)"/>
+    </node>
+  </group>
+
+
+
+</launch>

@@ -1,0 +1,17 @@
+<launch>
+    <arg name="initial_pose_x" default="0.0"/>
+    <arg name="initial_pose_y" default="0.0"/>
+    <arg name="initial_pose_z" default="0.0"/>
+
+    <param name="robot_description" command="$(find xacro)/xacro $(find car_description)/urdf/xacro/car.urdf.xacro" />
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" value="$(find car_description)/world/myhouse.world" />
+    </include>
+
+    <node pkg="gazebo_ros" type="spawn_model" name="model" args="-urdf -model mycar1 -x $(arg initial_pose_x) -y $(arg initial_pose_y) -z $(arg initial_pose_z) -param robot_description" />
+
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen" />
+    <node pkg="joint_state_publisher" type="joint_state_publisher" name="joint_state_publisher" output="screen" />
+
+
+</launch>

@@ -1,0 +1,15 @@
+<launch>
+  <!-- Arguments -->
+  <arg name="open_rviz" default="true"/>
+
+  <!-- 使用gazebo -->
+  <include file="$(find car_description)/launch/car_description.launch"/>
+
+  <!-- gmapping -->
+  <include file="$(find car_slam)/launch/car_gmapping.launch" />
+
+  <!-- rviz -->
+  <group if="$(arg open_rviz)"> 
+    <node pkg="rviz" type="rviz" name="rviz" required="true" args="-d $(find car_description)/rviz/myhouse.rviz"/> 
+  </group>
+</launch>

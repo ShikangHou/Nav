@@ -1,0 +1,42 @@
+<launch>
+  <!-- Arguments -->
+  <arg name="map_file" default="$(find car_navigation)/maps/nav.yaml"/>
+  <arg name="open_rviz" default="true"/>
+  <arg name="use_dwa_loacl_planner" default="false"/>
+  <arg name="initial_pose_x" default="0.0" />
+  <arg name="initial_pose_y" default="0.0" />
+  <arg name="initial_pose_z" default="0.0" />
+    <!-- 航向角 -->
+  <arg name="initial_pose_a" default="0.0" /> 
+
+
+  <!-- 使用gazebo -->
+  <include file="$(find car_description)/launch/car_description.launch">
+    <arg name="initial_pose_x" value="$(arg initial_pose_x)"/>
+    <arg name="initial_pose_y" value="$(arg initial_pose_y)"/>
+    <arg name="initial_pose_z" value="$(arg initial_pose_z)"/>
+  </include>
+
+
+  <!-- Map server -->
+  <node pkg="map_server" name="map_server" type="map_server" args="$(arg map_file)"/>
+
+  <!-- AMCL -->
+  <include file="$(find car_navigation)/launch/amcl.launch">
+    <arg name="initial_pose_x" value="$(arg initial_pose_x)"/>
+    <arg name="initial_pose_y" value="$(arg initial_pose_y)"/>
+    <arg name="initial_pose_a" value="$(arg initial_pose_a)"/>
+  </include>
+
+  <!-- move_base -->
+  <include file="$(find car_navigation)/launch/move_base.launch">
+    <arg name="use_dwa_loacl_planner" value="$(arg use_dwa_loacl_planner)" />
+  </include>
+
+  <!-- rviz -->
+  <group if="$(arg open_rviz)"> 
+    <node pkg="rviz" type="rviz" name="rviz" required="true" args="-d $(find car_navigation)/rviz/myhouse.rviz"
+          />
+  </group>
+
+</launch>
