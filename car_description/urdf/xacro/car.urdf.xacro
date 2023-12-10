@@ -8,4 +8,3 @@
     <xacro:include filename="sensors_laser.urdf.xacro" />
     <xacro:include filename="sensors_camera.urdf.xacro" />
 </robot>
-HEADERS

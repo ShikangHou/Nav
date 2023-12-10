@@ -29,10 +29,12 @@
   </include>
 
   <!-- move_base -->
-  <include file="$(find car_navigation)/launch/move_base.launch">
+  <!-- <include file="$(find car_navigation)/launch/move_base.launch">
     <arg name="use_dwa_loacl_planner" value="$(arg use_dwa_loacl_planner)" />
-  </include>
+  </include> -->
 
+  <include file ="$(find car_navigation)/launch/hybrid_astar.launch" />
+  
   <!-- rviz -->
   <group if="$(arg open_rviz)"> 
     <node pkg="rviz" type="rviz" name="rviz" required="true" args="-d $(find car_navigation)/rviz/myhouse.rviz"

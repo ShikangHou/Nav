@@ -1,0 +1,5 @@
+<launch>
+
+    <node pkg = "car_navigation" type="send_goal_node" name = "send_goal_node" output="screen"/>
+
+</launch>
